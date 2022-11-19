@@ -23,6 +23,7 @@ CLASSES=(
     "$1/History.java"
     "$1/HistoryHandler.java"
     "$1/HistoryHandlerImpl.java"
+    "$1/HistorySubscriber.java"
 )
 
 for CLASS in "${CLASSES[@]}"; do
