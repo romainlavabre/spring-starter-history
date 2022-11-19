@@ -1,9 +1,10 @@
 package com.replace.replace.api.history;
 
+import com.replace.replace.api.json.annotation.Group;
+import com.replace.replace.api.json.annotation.Json;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
@@ -13,36 +14,72 @@ public class History {
     public static final String TYPE_UPDATE = "UPDATE";
     public static final String TYPE_DELETE = "DELETE";
 
+    @Json( groups = {
+            @Group
+    } )
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY )
-    private long      id;
+    private long id;
+
+    @Json( groups = {
+            @Group( key = "author_type" )
+    } )
     @Column( name = "author_type" )
-    private String    authorType;
+    private String authorType;
+
+    @Json( groups = {
+            @Group( key = "author_id" )
+    } )
     @Column( name = "author_id" )
-    private int       authorId;
+    private int authorId;
+
+    @Json( groups = {
+            @Group( key = "subject_type" )
+    } )
     @Column( name = "subject_type", nullable = false )
-    private String    subjectType;
+    private String subjectType;
+
+    @Json( groups = {
+            @Group( key = "subject_id" )
+    } )
     @Column( name = "subject_id", nullable = false )
-    private int       subjectId;
+    private int subjectId;
+
+    @Json( groups = {
+            @Group( key = "subject_property" )
+    } )
     @Column( name = "subject_property" )
-    private String    subjectProperty;
+    private String subjectProperty;
+
+    @Json( groups = {
+            @Group( key = "new_value" )
+    } )
     @Column( name = "new_value", columnDefinition = "TEXT" )
-    private String    newValue;
+    private String newValue;
+
+    @Json( groups = {
+            @Group( key = "log_type" )
+    } )
     @Column( name = "log_type", nullable = false )
-    private String    logType;
+    private String logType;
     @Column( name = "ip_address" )
-    private String        ipAddress;
+    private String ipAddress;
+    private String uri;
+
+    @Json( groups = {
+            @Group( key = "created_at" )
+    } )
     @Column( name = "created_at", nullable = false )
-    private ZonedDateTime createdAt;
+    private Timestamp createdAt;
 
 
     public History() {
-        this.createdAt = ZonedDateTime.now( ZoneOffset.UTC );
+        createdAt = new Timestamp( (new Date().getTime()) );
     }
 
 
     public long getId() {
-        return this.id;
+        return id;
     }
 
 
@@ -52,7 +89,7 @@ public class History {
 
 
     public String getAuthorType() {
-        return this.authorType;
+        return authorType;
     }
 
 
@@ -62,7 +99,7 @@ public class History {
 
 
     public int getAuthorId() {
-        return this.authorId;
+        return authorId;
     }
 
 
@@ -72,7 +109,7 @@ public class History {
 
 
     public String getSubjectType() {
-        return this.subjectType;
+        return subjectType;
     }
 
 
@@ -82,7 +119,7 @@ public class History {
 
 
     public int getSubjectId() {
-        return this.subjectId;
+        return subjectId;
     }
 
 
@@ -92,7 +129,7 @@ public class History {
 
 
     public String getSubjectProperty() {
-        return this.subjectProperty;
+        return subjectProperty;
     }
 
 
@@ -102,7 +139,7 @@ public class History {
 
 
     public String getNewValue() {
-        return this.newValue;
+        return newValue;
     }
 
 
@@ -112,7 +149,7 @@ public class History {
 
 
     public String getLogType() {
-        return this.logType;
+        return logType;
     }
 
 
@@ -122,7 +159,7 @@ public class History {
 
 
     public String getIpAddress() {
-        return this.ipAddress;
+        return ipAddress;
     }
 
 
@@ -131,7 +168,24 @@ public class History {
     }
 
 
-    public ZonedDateTime getCreatedAt() {
+    public String getUri() {
+        return uri;
+    }
+
+
+    public History setUri( String uri ) {
+        this.uri = uri;
+
+        return this;
+    }
+
+
+    public Timestamp getCreatedAt() {
         return createdAt;
+    }
+
+
+    public void setCreatedAt( final Timestamp createdAt ) {
+        this.createdAt = createdAt;
     }
 }

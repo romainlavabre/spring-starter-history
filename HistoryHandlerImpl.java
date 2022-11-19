@@ -1,5 +1,6 @@
 package com.replace.replace.api.history;
 
+import com.replace.replace.api.request.Request;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -15,15 +16,18 @@ import java.util.Map;
 @RequestScope
 public class HistoryHandlerImpl implements HistoryHandler {
     private final Map< Object, History > store;
-    private final EntityManager          entityManager;
+    private final EntityManager           entityManager;
+    private final Request                 request;
     private final List<HistorySubscriber> historySubscribers;
 
 
     public HistoryHandlerImpl(
             final EntityManager entityManager,
+            Request request,
             List<HistorySubscriber> historySubscribers) {
-        this.entityManager = entityManager;
-        this.store         = new HashMap<>();
+        this.entityManager      = entityManager;
+        this.request            = request;
+        this.store              = new HashMap<>();
         this.historySubscribers = historySubscribers;
     }
 
@@ -38,6 +42,7 @@ public class HistoryHandlerImpl implements HistoryHandler {
         history.setSubjectType( object.getClass().getName() );
         history.setLogType( History.TYPE_CREATE );
         history.setIpAddress( this.getRemoteAddr() );
+        history.setUri( request.getUri() );
 
         this.store.put( object, history );
 
@@ -60,6 +65,7 @@ public class HistoryHandlerImpl implements HistoryHandler {
         history.setNewValue( this.getFieldValue( object, property ) );
         history.setLogType( History.TYPE_UPDATE );
         history.setIpAddress( this.getRemoteAddr() );
+        history.setUri( request.getUri() );
 
         this.store.put( object, history );
 
@@ -80,6 +86,7 @@ public class HistoryHandlerImpl implements HistoryHandler {
         history.setSubjectType( object.getClass().getName() );
         history.setLogType( History.TYPE_DELETE );
         history.setIpAddress( this.getRemoteAddr() );
+        history.setUri( request.getUri() );
 
         this.entityManager.persist( history );
 
