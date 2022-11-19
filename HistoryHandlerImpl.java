@@ -1,6 +1,7 @@
 package com.replace.replace.api.history;
 
 import com.replace.replace.api.request.Request;
+import com.replace.replace.configuration.event.Event;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -15,16 +16,16 @@ import java.util.Map;
 @Service
 @RequestScope
 public class HistoryHandlerImpl implements HistoryHandler {
-    private final Map< Object, History > store;
-    private final EntityManager           entityManager;
-    private final Request                 request;
-    private final List<HistorySubscriber> historySubscribers;
+    private final Map< Object, History >    store;
+    private final EntityManager             entityManager;
+    private final Request                   request;
+    private final List< HistorySubscriber > historySubscribers;
 
 
     public HistoryHandlerImpl(
             final EntityManager entityManager,
             Request request,
-            List<HistorySubscriber> historySubscribers) {
+            List< HistorySubscriber > historySubscribers ) {
         this.entityManager      = entityManager;
         this.request            = request;
         this.store              = new HashMap<>();
@@ -46,7 +47,7 @@ public class HistoryHandlerImpl implements HistoryHandler {
 
         this.store.put( object, history );
 
-        for ( HistorySubscriber historySubscriber : historySubscribers ){
+        for ( HistorySubscriber historySubscriber : historySubscribers ) {
             historySubscriber.create( object, history );
         }
     }
@@ -69,7 +70,7 @@ public class HistoryHandlerImpl implements HistoryHandler {
 
         this.store.put( object, history );
 
-        for ( HistorySubscriber historySubscriber : historySubscribers ){
+        for ( HistorySubscriber historySubscriber : historySubscribers ) {
             historySubscriber.update( object, property, history );
         }
     }
@@ -90,7 +91,7 @@ public class HistoryHandlerImpl implements HistoryHandler {
 
         this.entityManager.persist( history );
 
-        for ( HistorySubscriber historySubscriber : historySubscribers ){
+        for ( HistorySubscriber historySubscriber : historySubscribers ) {
             historySubscriber.delete( object, history );
         }
     }
@@ -133,7 +134,15 @@ public class HistoryHandlerImpl implements HistoryHandler {
 
 
     @Override
-    public void receiveEvent( final String event, final Map< String, Object > params ) throws RuntimeException {
+    public List< Event > getEvents() {
+        return List.of(
+                Event.TRANSACTION_SUCCESS
+        );
+    }
+
+
+    @Override
+    public void receiveEvent( final Event event, final Map< String, Object > params ) throws RuntimeException {
         for ( final Map.Entry< Object, History > entry : this.store.entrySet() ) {
             final History history = entry.getValue();
 
