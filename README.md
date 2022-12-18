@@ -8,15 +8,17 @@ Usage:
 import com.replace.replace.api.history.HistoryHandler;
 import com.replace.replace.api.request.Request;
 
-public class CreateSample{
+public class CreateSample {
 
     protected final HistoryHandler historyHandler;
 
-    public CreateSample(HistoryHandler historyHandler){
+
+    public CreateSample( HistoryHandler historyHandler ) {
         this.historyHandler = historyHandler;
     }
 
-    public void create(Request request, Sample sample){
+
+    public void create( Request request, Sample sample ) {
     
         ...
 
@@ -27,20 +29,21 @@ public class CreateSample{
 
 This sample adds trace of Sample creation.
 
-
 ```java
 import com.replace.replace.api.history.HistoryHandler;
 import com.replace.replace.api.request.Request;
 
-public class UpdateName{
+public class UpdateName {
 
     protected final HistoryHandler historyHandler;
 
-    public UpdateName(HistoryHandler historyHandler){
+
+    public UpdateName( HistoryHandler historyHandler ) {
         this.historyHandler = historyHandler;
     }
 
-    public void update(Request request, Sample sample){
+
+    public void update( Request request, Sample sample ) {
     
         ...
 
@@ -51,21 +54,21 @@ public class UpdateName{
 
 This sample adds trace of Sample update.
 
-
-
 ```java
 import com.replace.replace.api.history.HistoryHandler;
 import com.replace.replace.api.request.Request;
 
-public class DeleteSample{
+public class DeleteSample {
 
     protected final HistoryHandler historyHandler;
 
-    public DeleteSample(HistoryHandler historyHandler){
+
+    public DeleteSample( HistoryHandler historyHandler ) {
         this.historyHandler = historyHandler;
     }
 
-    public void delete(Request request, Sample sample){
+
+    public void delete( Request request, Sample sample ) {
     
         ...
 
@@ -88,3 +91,9 @@ This library take the pertinent values of object for keep good trace.
 ### Requirements
 
 - Module git@github.com:romainlavabre/spring-starter-event.git
+
+### Version
+
+##### 3.0.0
+
+Migrate to spring-boot 3.0.0

@@ -2,8 +2,8 @@ package com.replace.replace.api.history;
 
 import com.replace.replace.api.json.annotation.Group;
 import com.replace.replace.api.json.annotation.Json;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
 

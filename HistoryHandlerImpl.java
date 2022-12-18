@@ -2,12 +2,12 @@ package com.replace.replace.api.history;
 
 import com.replace.replace.api.request.Request;
 import com.replace.replace.configuration.event.Event;
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
