@@ -5,8 +5,6 @@ import com.replace.replace.configuration.event.Event;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -20,14 +18,17 @@ public class HistoryHandlerImpl implements HistoryHandler {
     private final EntityManager             entityManager;
     private final Request                   request;
     private final List< HistorySubscriber > historySubscribers;
+    private final HistoryConfigurer         historyConfigurer;
 
 
     public HistoryHandlerImpl(
             final EntityManager entityManager,
             Request request,
-            List< HistorySubscriber > historySubscribers ) {
+            List< HistorySubscriber > historySubscribers,
+            HistoryConfigurer historyConfigurer ) {
         this.entityManager      = entityManager;
         this.request            = request;
+        this.historyConfigurer  = historyConfigurer;
         this.store              = new HashMap<>();
         this.historySubscribers = historySubscribers;
     }
@@ -38,11 +39,11 @@ public class HistoryHandlerImpl implements HistoryHandler {
         assert object != null : "variable object should not be null";
 
         final History history = new History();
-        history.setAuthorId( 0 );
-        history.setAuthorType( "Unknow" );
+        history.setAuthorId( historyConfigurer.getAuthorId().orElse( 0 ) );
+        history.setAuthorType( historyConfigurer.getAuthorName().orElse( "Unknow" ) );
         history.setSubjectType( object.getClass().getName() );
         history.setLogType( History.TYPE_CREATE );
-        history.setIpAddress( this.getRemoteAddr() );
+        history.setIpAddress( historyConfigurer.getAuthorIp().orElse( null ) );
         history.setUri( request.getUri() );
 
         this.store.put( object, history );
@@ -59,13 +60,13 @@ public class HistoryHandlerImpl implements HistoryHandler {
         assert object != null : "variable object should not be null";
 
         final History history = new History();
-        history.setAuthorId( 0 );
-        history.setAuthorType( "Unknow" );
+        history.setAuthorId( historyConfigurer.getAuthorId().orElse( 0 ) );
+        history.setAuthorType( historyConfigurer.getAuthorName().orElse( "Unknow" ) );
         history.setSubjectType( object.getClass().getName() );
         history.setSubjectProperty( property );
         history.setNewValue( this.getFieldValue( object, property ) );
         history.setLogType( History.TYPE_UPDATE );
-        history.setIpAddress( this.getRemoteAddr() );
+        history.setIpAddress( historyConfigurer.getAuthorIp().orElse( null ) );
         history.setUri( request.getUri() );
 
         this.store.put( object, history );
@@ -81,12 +82,12 @@ public class HistoryHandlerImpl implements HistoryHandler {
         assert object != null : "variable object should not be null";
 
         final History history = new History();
-        history.setAuthorId( 0 );
-        history.setAuthorType( "Unknow" );
+        history.setAuthorId( historyConfigurer.getAuthorId().orElse( 0 ) );
+        history.setAuthorType( historyConfigurer.getAuthorName().orElse( "Unknow" ) );
         history.setSubjectId( Integer.valueOf( this.getFieldValue( object, "id" ) ) );
         history.setSubjectType( object.getClass().getName() );
         history.setLogType( History.TYPE_DELETE );
-        history.setIpAddress( this.getRemoteAddr() );
+        history.setIpAddress( historyConfigurer.getAuthorIp().orElse( null ) );
         history.setUri( request.getUri() );
 
         this.entityManager.persist( history );
@@ -123,13 +124,6 @@ public class HistoryHandlerImpl implements HistoryHandler {
                 return null;
             }
         }
-    }
-
-
-    private String getRemoteAddr() {
-        return (( ServletRequestAttributes ) RequestContextHolder.currentRequestAttributes())
-                .getRequest()
-                .getRemoteAddr();
     }
 
 
