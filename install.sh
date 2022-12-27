@@ -50,6 +50,6 @@ else
 fi
 
 
-sed -i "s|com.$PACKAGES.api.history.config;|com.${PACKAGES}.configuration.history;|" "$DIRECTORY/HistoryConfigurerImpl.java"
+sed -i "s|com.replace.replace.api.history.config;|com.${PACKAGES}.configuration.history;|" "$DIRECTORY/HistoryConfigurerImpl.java"
 
 rm -Rf "$1/config"
