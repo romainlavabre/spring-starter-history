@@ -51,5 +51,6 @@ fi
 
 
 sed -i "s|com.replace.replace.api.history.config;|com.${PACKAGES}.configuration.history;|" "$DIRECTORY/HistoryConfigurerImpl.java"
+sed -i "s|com.replace.replace|com.${PACKAGES}|" "$DIRECTORY/HistoryConfigurerImpl.java"
 
 rm -Rf "$1/config"
